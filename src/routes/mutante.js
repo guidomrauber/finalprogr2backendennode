@@ -1,7 +1,18 @@
 const express = require('express');
+const mutantController = require('../controller/mutant');
+const mutantMW = require('../middleware/mutant');
 const router = express.Router();
 
 const mysqlConnection  = require('../database.js');
+
+//accedemos con get al metodo del controlador
+
+
+router.get('/test', mutantController.test);
+
+router.post('/mutant',mutantMW.matrix ,mutantMW.adnCaracter, mutantMW.isMutant);
+
+router.get('/stats', mutantController.estadistica);
 
 // GET all mutante
 router.get('/', (req, res) => {
