@@ -1,48 +1,37 @@
 /* Es una especie de clase que va a tener una serie de metodos 
 	o acciones que va a poder hacer relacionada con la entidad de projets*/
 
-'use strict'
+	'use strict'
 
 
-var controller = {
-
-
+	var controller = {
 	
-	//TEST
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	test: function(req , res) {
-		var respuestaTest = res.status(200).send({
-			message: 'Test para probar la API'
-		});
-
-		return respuestaTest;
-	},
-
-	//Metodo GETALL
-	///////////////////////////////////////////////////////////////////////////////////////////////////
-	estadistica: function(req, res){
+	
 		
-		//Uso promesas anidadas para hacer consultas anidadas
-		Personas.countDocuments({}, (err, contador) => {
+		//TEST
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		test: function(req , res) {
+			var respuestaTest = res.status(200).send({
+				message: 'Test para probar la API'
+			});
+	
+			return respuestaTest;
+		},
+	
+		//Metodo GETALL
+		///////////////////////////////////////////////////////////////////////////////////////////////////
+		estadistica: function(req, res){
 			
-			Personas.countDocuments({mutante: true},(err, countV) => {
-				let promedio = (countV*100)/contador
-				let redondeo = Math.round(promedio)
-				if (err) return res.status(503).send({Mensaje: 'Error al obtener datos'});
-				if (!contador) return res.status(404).send({Mensaje: 'No hay registros'});
-				return res.status(200).send({
-					Total_Registrado: contador,
-					Mutantes_Detectados: countV,
-					Radio: `${redondeo}%`
-				});
-				
-			})
-			if (err) return res.status(503).send({Mensaje: 'Error al obtener datos'});			
-			
-	   });
-	}
-};
+			var userdata = 'mutante';
 
-module.exports = controller;
-
-//Se recomienda crear un fichero de rutas por cada uno de los controladores
+var sql = 'SELECT COUNT(*) as mutante FROM mutante WHERE age = ?'
+connection.query(sql, [userdata], function(err, rows, fields) {
+  if (err) throw err;
+  console.log('Query result: ', rows);
+});
+		}
+	};
+	
+	module.exports = controller;
+	
+	//Se recomienda crear un fichero de rutas por cada uno de los controladores

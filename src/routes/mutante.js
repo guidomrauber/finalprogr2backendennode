@@ -8,12 +8,23 @@ const mysqlConnection  = require('../database.js');
 //accedemos con get al metodo del controlador
 
 
-router.get('/test', mutantController.test);
-
 router.post('/mutant',mutantMW.matrix ,mutantMW.adnCaracter, mutantMW.isMutant);
 
-router.get('/stats', mutantController.estadistica);
 
+// get all stats
+
+router.get('/stats', (req,res) => {
+  
+  mysqlConnection.query('SELECT  condicion,COUNT(*) AS mutante FROM mutante GROUP BY condicion ',(err, rows, fields) => {
+    if(!err) {
+      res.json(rows);
+      
+    } else {
+      console.log(err);
+    }
+  }); 
+  
+});
 // GET all mutante
 router.get('/', (req, res) => {
   mysqlConnection.query('SELECT * FROM mutante', (err, rows, fields) => {
