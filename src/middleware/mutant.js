@@ -3,27 +3,7 @@
 
 const middleware = {
     
-    matrix: function(req, res, next){
-        let params = req.body
-        let adn = params.adn
-        let cuadrada = true
-        
-        
-        for (var tamaño = 0; tamaño < adn.length; tamaño++) {
-			if (adn.length != adn[tamaño].length) {
-				cuadrada = false
-			}
-        }  
-            
-        if (cuadrada == true) {
-            return next();
-        }
-        else{
-            return res.status(503).send({Alerta: 'No es una matriz cuadrada'});
-        }
-
-			
-    },
+    
     adnCaracter: function(req, res, next){
         
         let params = req.body

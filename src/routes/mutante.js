@@ -5,10 +5,8 @@ const router = express.Router();
 
 const mysqlConnection  = require('../database.js');
 
-//accedemos con get al metodo del controlador
 
-
-router.post('/mutant',mutantMW.matrix ,mutantMW.adnCaracter, mutantMW.isMutant);
+router.post('/mutant',mutantMW.adnCaracter,mutantMW.isMutant);
 
 
 // get all stats
