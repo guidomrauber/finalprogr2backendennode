@@ -2,7 +2,7 @@ const express = require('express');
 const mutantController = require('../controller/mutant');
 const mutantMW = require('../middleware/mutant');
 const router = express.Router();
-
+const cors = require('cors');
 const mysqlConnection  = require('../database.js');
 
 
