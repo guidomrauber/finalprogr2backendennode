@@ -1,46 +1,31 @@
 const express = require('express');
 const app = express();
+const path = require('path');
+const http = require('http');
+const bodyParser = require('body-parser');
 
-// No CORS Headder set
-app.get('/', function(request, response) {
-  response.sendFile(__dirname + '/message.json');
-});
+const request = require('request');
 
-// CORS header `Access-Control-Allow-Origin` set to accept all
-app.get('/allow-cors', function(request, response) {
-  response.set('Access-Control-Allow-Origin', '*');
-  response.sendFile(__dirname + '/message.json');
-});
-// Add headers
-app.use(function (req, res, next) {
 
-  // Website you wish to allow to connect
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
 
-  // Request methods you wish to allow
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-
-  // Request headers you wish to allow
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-
-  // Set to true if you need the website to include cookies in the requests sent
-  // to the API (e.g. in case you use sessions)
-  res.setHeader('Access-Control-Allow-Credentials', true);
-
-  // Pass to next layer of middleware
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
   next();
 });
-// Settings
-app.set('port', process.env.PORT || 3000);
 
-// Middlewares
-app.use(express.json());
+app.get('/jokes/random', (req, res) => {
+  request(
+    { url: 'https://joke-api-strict-cors.appspot.com/jokes/random' },
+    (error, response, body) => {
+      if (error || response.statusCode !== 200) {
+        return res.status(500).json({ type: 'error', message: err.message });
+      }
 
-// Routes
-app.use(require('./routes/mutante'));
-
-
-// Starting the server
-app.listen(app.get('port'), () => {
-  console.log(`Server on port ${app.get('port')}`);
+      res.json(JSON.parse(body));
+    }
+  )
 });
+// Routes
+app.use('/api',require('./routes/mutante'));
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`listening on ${PORT}`));
