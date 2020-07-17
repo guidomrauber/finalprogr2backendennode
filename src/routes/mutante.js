@@ -17,24 +17,23 @@ router.get('/', (req, res) => {
 router.get('/stats', (req,res) => {
   
   mysqlConnection.query('SELECT  condicion,COUNT(*) AS total FROM mutante GROUP BY condicion ',(err, rows, fields) => {
-    var total=[];
+    var total = [];
     total[0]= rows[0].total;
-    total[1]= rows[1].total;
+    total[1] = rows[1].total;
     if(!err) {
       res.json(total);
-      
-      
+     
     } else {
       console.log(err);
     }
   }); 
-  
-});
+}); 
+
 // GET all mutante
 router.get('/mutante', (req, res) => {
   mysqlConnection.query('SELECT * FROM mutante', (err, rows, fields) => {
     if(!err) {
-      res.json(rows.total);
+      res.json(rows);
     } else {
       console.log(err);
     }
