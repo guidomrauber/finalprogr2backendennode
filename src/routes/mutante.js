@@ -1,12 +1,28 @@
 const express = require('express');
-const mutantController = require('../controller/mutant');
 const mutantMW = require('../middleware/mutant');
 const router = express.Router();
 const cors = require('cors');
 const mysqlConnection  = require('../database.js');
+const app = express();
 
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  req.header('Access-Control-Allow-Origin', '*');
+  next();
+});
 
-router.post('/mutant',mutantMW.adnCaracter,mutantMW.isMutant);
+router.post('/mutant', (req,res) =>{
+ res= mutantMW.isMutant();
+ if(res == true) {
+  res.send('es mutante');
+  router.post('/agregar');
+ 
+}
+else {
+  res.send('no es mutante');
+  router.post('/agregar');
+}
+});
 
 /* GET api listing. */
 router.get('/', (req, res) => {
@@ -21,7 +37,7 @@ router.get('/stats', (req,res) => {
     total[0]= rows[0].total;
     total[1] = rows[1].total;
     if(!err) {
-      res.json(total);
+      res.json(rows);
      
     } else {
       console.log(err);
@@ -44,7 +60,13 @@ router.get('/mutante', (req, res) => {
 
 // INSERT An mutante
 router.post('/agregar', (req, res) => {
-  const {id, dna, condicion} = req.body;
+  const dna = req[0].body+req[1].body+req[2].body+req[3].body+req[4].body+req[5].body;
+  if(res == true){
+    condicion="mutante";
+  }
+  else{
+    condicion="no mutante";
+  }
   console.log(id, dna, condicion);
   const query = `
     SET @id = ?;
